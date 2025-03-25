@@ -1,218 +1,217 @@
 #!/bin/bash
-logo()
-	{
-	echo "                                              ___           ___      "
-	echo "     ___           __             ___        /  /\         /  /\     "
-	echo "    /  /\         |  |\          /__/\      /  /::|       /  /::\    "
-	echo "   /  /::\        |  |:|         \__\:\    /  /:|:|      /  /:/\:\   "
-	echo "  /  /:/\:\       |  |:|         /  /::\  /  /:/|:|__   /  /:/  \:\  "
-	echo " /  /::\ \:\      |__|:|__    __/  /:/\/ /__/:/_|::::\ /__/:/_\_ \:\ "
-	echo "/__/:/\:\_\:\     /  /::::\  /__/\/:/~~  \__\/  /~~/:/ \  \:\__/\_\/ "
-	echo "\__\/  \:\/:/    /  /:/~~~~  \  \::/           /  /:/   \  \:\ \:\   "
-	echo "     \  \::/    /__/:/        \  \:\          /  /:/     \  \:\/:/   "
-	echo "      \__\/     \__\/          \__\/         /__/:/       \  \::/    "
-	echo "                                             \__\/         \__\/     "
-	echo "									--By Lrst_6963"
-	}
 
-dn()
-	{	
-	#clear
-	echo
-	echo -e "\e[4;31m 		刷取"$sl"完成！！	 \e[0m"
-	echo -e "\e[4;31m 		刷取"$sl"完成！！	 \e[0m"
-	}
+# 全局变量声明
+declare -g filename="" quantity="" url=""
 
-pyimg()
-	{
-	logo
-	echo ""
-	echo "输入图片名："
-	read ss
-	clear
-	logo
-	echo " "
-	echo "输入刷图数量："
-	read sl
-	clear
-	logo
-	echo ""
-	echo "
-	 随机二次元图片：https://api.yimian.xyz/img?type=moe	 
-	 随机Bing壁纸：https://api.yimian.xyz/img?type=wallpaper/	
-	 随机1920x1080尺寸二次元图片：https://api.yimian.xyz/img?type=moe&size=1920x1080	
-	 东方的随机图，43000+：https://img.paulzzh.tech/touhou/random	
-	 动漫图片接口：https://www.xzccc.com/api/acg/	
-	 涩图接口（弃用，浏览器能用，）：http://setu.awsl.ee/	
-	 暗鸦の随机图片API接口:https://api.r10086.com/动漫综合1.php	
-	 随机二次元图片API-樱花：http://www.dmoe.cc/random.php	
-	 https://api.r10086.com/缘之空1.php	
-	 岁月小筑随机图片（ACG背景）：http://img.xjh.me/random_img.php?type=bg&ctype=acg	
-	 岁月小筑随机图片（背景）：http://img.xjh.me/random_img.php?type=bg	
-	 随机输出图：https://api.yuzhitu.cn//sjbz/api.php?method=mobile&lx=suiji	
-	 动漫星空：https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php	
-	 https://yingserver.cn/open/acgimg/acgurl.php	
-	 http://l-by.cn/api/api/api.php（二次元动漫）丨
-	 http://l-by.cn/api/mcapi/mcapi.php（mc酱动漫）丨
-	 http://l-by.cn/api/gqapi/gqapi.php（高清壁纸）	
-	 https://api.dujin.org/pic/"
-	echo ""
-	echo "输入刷图接口哦！！："
-	read url
-	clear
-	sta()
-	{
-	logo
-	echo ""
-	echo "请确认："
-	echo ""
-	echo "		图片数量："$sl
-        echo ""	
-	echo "		图片名字："$ss
-	echo ""
-	echo "		图片接口："$url
-	echo ""
-	echo "Press 1 To  Start "
-	echo "Press 2 To  Restart "
-	echo "Press 3 To  Exit"
-	read ent
-	clear		
-	if [ "$ent" == "1" ];then
-	   		for i in $(seq 1 $sl)  
-	   		do   
-				wget -q -O $ss"_"$i.jpg $url
-				echo -e "\e[4;31m 		第$i张完成！！ \e[0m"
-	   		done
-	   		dn
-			exit
-		elif [ "$ent" == "2" ];then
-			pyimg
-		elif [ "$ent" == "3" ];then
-			exit
-		else
-			echo -e "\e[4;32m 输入无效   ！！！ \e[0m"
-			echo -e "\e[4;32m 请重新输入 ！！！ \e[0m"
-			sta
-	fi
-	}
-	sta
-	}   
-help()
-	{
-	echo "
-	-u "URL"
-	-n file name
-	-v volume
-	-help help
-	-o 进入选项模式 推荐
-	"
-	}
+# 颜色定义
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
 
+# 预设API接口
+declare -A API_LIST=(
+    [1]="https://www.loliapi.com/bg/"
+    [2]="https://api.yimian.xyz/img?type=wallpaper"
+    [3]="https://img.paulzzh.tech/touhou/random"
+    [4]="https://www.xzccc.com/api/acg/"
+    [5]="http://img.xjh.me/random_img.php?type=bg"
+    [6]="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php"
+)
 
-optt()
-{
-		while : 
-		do
-			logo
-			echo ""
-			echo -e "\e[4;31m 选择吧!!! \e[0m"
-			echo " "
-			echo "Press 1 To  Start "
-			echo "Press 2 To  Start "
-			echo "Press 3 To  Start "
-			echo "Press 4 To  Exit "
-			read ins
-			clear
-			if [ "$ins" == "1" ];then
-					pyimg
-					exit
-				elif [ "$ins" == "2" ];then
-					pyimg
-					exit
-				elif [ "$ins" = "3" ];then
-					pyimg
-					exit
-					elif [ "$ins" = "4" ];then
-					exit
-					else
-					echo ""
-					echo -e "\e[4;32m 输入无效 ！！！ \e[0m"
-			fi
-		done; }
+show_help() {
+    echo -e "\n${BOLD}Usage:${RESET}"
+    echo "  ./pyimg.sh [options]"
+    echo -e "\n${BOLD}Options:${RESET}"
+    echo "  -u, --url       Specify image API URL"
+    echo "  -n, --name      Set output filename prefix"
+    echo "  -c, --count     Set number of images to download"
+    echo "  -h, --help      Show this help message"
+    echo "  -i, --interactive  Enter interactive mode"
+    echo -e "\n${BOLD}Examples:${RESET}"
+    echo "  ./pyimg.sh -n mypic -c 10 -u https://example.com/api"
+    echo "  ./pyimg.sh --interactive"
+}
 
-Get_Dist_Name()
-{
-    if grep -Eqii "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
-        DISTRO='CentOS'
-        PM='yum'
-    elif grep -Eqi "Red Hat Enterprise Linux Server" /etc/issue || grep -Eq "Red Hat Enterprise Linux Server" /etc/*-release; then
-        DISTRO='RHEL'
-        PM='yum'
-    elif grep -Eqi "Aliyun" /etc/issue || grep -Eq "Aliyun" /etc/*-release; then
-        DISTRO='Aliyun'
-        PM='yum'
-    elif grep -Eqi "Fedora" /etc/issue || grep -Eq "Fedora" /etc/*-release; then
-        DISTRO='Fedora'
-        PM='yum'
-    elif grep -Eqi "Debian" /etc/issue || grep -Eq "Debian" /etc/*-release; then
-        DISTRO='Debian'
-        PM='apt'
-    elif grep -Eqi "Ubuntu" /etc/issue || grep -Eq "Ubuntu" /etc/*-release; then
-        DISTRO='Ubuntu'
-        PM='apt'
-    elif grep -Eqi "Raspbian" /etc/issue || grep -Eq "Raspbian" /etc/*-release; then
-        DISTRO='Raspbian'
-        PM='apt'
-    else
-        DISTRO='unknow'
+show_logo() {
+    clear
+    echo "${BOLD}${YELLOW}"
+    cat << "LOGO"
+                                              ___           ___
+     ___           __             ___        /  /\         /  /\
+    /  /\         |  |\          /__/\      /  /::|       /  /::\
+   /  /::\        |  |:|         \__\:\    /  /:|:|      /  /:/\:\
+  /  /:/\:\       |  |:|         /  /::\  /  /:/|:|__   /  /:/  \:\
+ /  /::\ \:\      |__|:|__    __/  /:/\/ /__/:/_|::::\ /__/:/_\_ \:\
+/__/:/\:\_\:\     /  /::::\  /__/\/:/~~  \__\/  /~~/:/ \  \:\__/\_\/
+\__\/  \:\/:/    /  /:/~~~~  \  \::/           /  /:/   \  \:\ \:\
+     \  \::/    /__/:/        \  \:\          /  /:/     \  \:\/:/
+      \__\/     \__\/          \__\/         /__/:/       \  \::/
+                                             \__\/         \__\/
+                                                --By Lrst_6963
+LOGO
+    echo "${RESET}"
+}
+
+validate_number() {
+    local num="$1"
+    [[ "$num" =~ ^[1-9][0-9]*$ ]] || {
+        echo -e "${RED}Error: Please enter a valid positive integer${RESET}"
+        return 1
+    }
+}
+
+check_dependencies() {
+    # 检查wget
+    if ! command -v wget &> /dev/null; then
+        echo -e "${YELLOW}Installing wget...${RESET}"
+        if [[ $(command -v apt-get) ]]; then
+            sudo apt-get update && sudo apt-get install -y wget
+        elif [[ $(command -v yum) ]]; then
+            sudo yum install -y wget
+        else
+            echo -e "${RED}Error: Cannot install wget automatically. Please install it manually.${RESET}"
+            exit 1
+        fi
+    fi
+
+    # 检查ffmpeg
+    if ! command -v ffmpeg &> /dev/null; then
+        echo -e "${RED}Error: ffmpeg is required but not installed.${RESET}"
+        echo -e "Installation guide:"
+        if [[ $(command -v apt-get) ]]; then
+            echo "  sudo apt-get install ffmpeg"
+        elif [[ $(command -v yum) ]]; then
+            echo "  sudo yum install ffmpeg"
+        else
+            echo "  Install ffmpeg using your package manager"
+        fi
+        exit 1
     fi
 }
 
-while getopts "u:n:v:h:o" OPT; do
-		case $OPT in
-			u) url=$OPTARG;;
-			n) name=$OPTARG;;
-			v) nu=$OPTARG;;
-			h) help && exit 1;;
-			o) optt;;
-			*) echo "未知参数 | 输入'pyimg -help'获取帮助" && exit 1;;
-		esac
+download_images() {
+    local count=1
+    echo  # 初始空行分隔
+
+    while [[ $count -le $quantity ]]; do
+        temp_file="${filename}_${count}.tmp"
+        final_file="${filename}_${count}.jpg"
+
+        # 下载进度显示
+        printf "\r\033[K${YELLOW}🚀 下载中: %d/%d${RESET}" "$count" "$quantity"
+
+        # 下载到临时文件
+        if ! wget --timeout=30 -q -O "$temp_file" "$url"; then
+            printf "\r\033[K${RED}❌ 下载失败: %d/%d${RESET}\n" "$count" "$quantity"
+            ((count++))
+            continue
+        fi
+
+        # 转换进度显示
+        printf "\r\033[K${YELLOW}🔄 转换中: %d/%d${RESET}" "$count" "$quantity"
+        if ffmpeg -v error -i "$temp_file" -q:v 2 "$final_file" &> /dev/null; then
+            rm -f "$temp_file"
+            printf "\r\033[K${GREEN}✅ 已完成: %d/%d${RESET}" "$count" "$quantity"
+        else
+            printf "\r\033[K${RED}❌ 转换失败: %d/%d (原始文件保留: %s)${RESET}\n" "$count" "$quantity" "$temp_file"
+        fi
+
+        ((count++))
+        sleep 0.1  # 保证显示流畅
+    done
+
+    echo -e "\n${BOLD}${GREEN}🎉 所有任务已完成！共成功 ${quantity} 张${RESET}"
+}
+
+interactive_mode() {
+    show_logo
+    
+    # 获取文件名
+    while :; do
+        read -rp "Enter filename prefix: " filename
+        [[ -n "$filename" ]] && break
+        echo -e "${RED}Error: Filename cannot be empty${RESET}"
+    done
+
+    # 获取下载数量
+    while :; do
+        read -rp "Enter number of images to download: " quantity
+        validate_number "$quantity" && break
+    done
+
+    # API选择菜单
+    echo -e "\n${BOLD}Available APIs:${RESET}"
+    for key in "${!API_LIST[@]}"; do
+        echo "  ${key}) ${API_LIST[$key]}"
+    done
+    echo -e "  0) Enter custom URL"
+
+    while :; do
+        read -rp "Select API (number) or enter 0 for custom: " choice
+        if [[ "$choice" == 0 ]]; then
+            read -rp "Enter custom URL: " url
+            [[ -n "$url" ]] && break
+            echo -e "${RED}Error: URL cannot be empty${RESET}"
+        elif [[ -n "${API_LIST[$choice]}" ]]; then
+            url="${API_LIST[$choice]}"
+            break
+        else
+            echo -e "${RED}Invalid selection, try again${RESET}"
+        fi
+    done
+
+    # 确认信息
+    echo -e "\n${BOLD}Summary:${RESET}"
+    echo "  Filename: ${filename}"
+    echo "  Quantity: ${quantity}"
+    echo "  API URL: ${url}"
+    echo -e "\nPress any key to start downloading (Ctrl+C to cancel)"
+    read -n1 -s
+    
+    check_dependencies
+    download_images
+}
+
+# 参数解析
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -u|--url)
+            url="$2"
+            shift 2
+            ;;
+        -n|--name)
+            filename="$2"
+            shift 2
+            ;;
+        -c|--count)
+            quantity="$2"
+            shift 2
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -i|--interactive)
+            interactive_mode
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Unknown option: $1${RESET}"
+            show_help
+            exit 1
+            ;;
+    esac
 done
-clear
-echo "URL:"$url
-echo "Name:"$name
-echo "Volume:"$nu
-if [ ! $url ]; then
-		echo "
-		-u 参数不能为空
-		输入'pyimg -help'获取帮助
-		"
-		exit
-elif [ ! $name ]; then
-		echo "
-		-n 参数不能为空
-		输入'pyimg -help'获取帮助
-		"
-		exit
-elif [ ! $nu ]; then
-		echo "
-		-v 参数不能为空
-		输入'pyimg -help'获取帮助
-		"
-		exit
+
+# 非交互模式参数验证
+if [[ -z "$url" || -z "$filename" || -z "$quantity" ]]; then
+    echo -e "${RED}Error: Missing required parameters${RESET}"
+    show_help
+    exit 1
 fi
-logo
-Get_Dist_Name
-if [ $PM = yum ]; then
-	yum -qa | grep "wget"
-elif [ $PM = apt ]; then
-	dpkg -l | grep "wget"
-fi
-if [ $? = 1 ]; then
-	$PM install wget
-fi
-for i in $(seq 1 $nu); do   
-	timeout 60 wget -q -O $name"_"$i.jpg $url
-	echo -e "\e[4;31m 		第$i张完成！！ \e[0m"
-done
-dn
+
+validate_number "$quantity" || exit 1
+check_dependencies
+download_images
